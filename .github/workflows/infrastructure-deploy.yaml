@@ -4,14 +4,21 @@ on:
   push:
     paths:
     - '**.bicep' # Should only run when an infra template changes
-    - '**/infrastructure-deploy.yaml'
+    - '**/infrastructure-deploy.yaml' # or, when this workflow changes
  
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
       RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
-      BICEP_INPUT_PARAMETERS_JSON: ${{ secrets.BICEP_INPUT_PARAMETERS_JSON }}      
+      KEYVAULTACCESSPOLICYTARGETOBJECTID: ${{ secrets.KEYVAULTACCESSPOLICYTARGETOBJECTID }}
+      MLWORKSPACENAME: ${{ secrets.MLWORKSPACENAME }}
+      KEYVAULTNAME: ${{ secrets.KEYVAULTNAME }}
+      STORAGEACCOUNTNAME: ${{ secrets.STORAGEACCOUNTNAME }}
+      COMPUTEINSTANCENAME: ${{ secrets.COMPUTEINSTANCENAME }}
+      MLCLUSTERNAME: ${{ secrets.MLCLUSTERNAME }}
+      APPINSIGHTSNAME: ${{ secrets.APPINSIGHTSNAME }}
+      CONTAINERREGISTRYNAME: ${{ secrets.CONTAINERREGISTRYNAME }}
     steps:
 
     - name: Az CLI Login
@@ -30,4 +37,4 @@ jobs:
 
     - name: Deploy Bicep template
       run: |
-        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" --template-file $GITHUB_WORKSPACE/infrastructure/main.json --parameters "${{ env.BICEP_INPUT_PARAMETERS_JSON }}"
+        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" --template-file $GITHUB_WORKSPACE/infrastructure/main.json --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }}        
