@@ -31,10 +31,3 @@ jobs:
     - name: Deploy Bicep template
       run: |
         az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" --template-file $GITHUB_WORKSPACE/infrastructure/main.json --parameters "${{ env.BICEP_INPUT_PARAMETERS_JSON }}"
-
-    #- name: Az CLI Resource Group Deployment
-    #  uses: azure/CLI@v1
-    #  with:
-    #    azcliversion: 2.22.1
-    #    inlineScript: |
-    #      az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters "${{ env.BICEP_INPUT_PARAMETERS_JSON }}"
