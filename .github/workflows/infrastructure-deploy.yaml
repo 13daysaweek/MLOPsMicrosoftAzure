@@ -3,7 +3,7 @@ name: Infrastructure Deploy
 on:
   push:
     branches:
-    - main
+    - main # Only run when things are pushed to main
     paths:
     - '**.bicep' # Should only run when an infra template changes
     - '**/infrastructure-deploy.yaml' # or, when this workflow changes
