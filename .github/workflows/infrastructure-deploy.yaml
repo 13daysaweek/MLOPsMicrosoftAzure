@@ -5,12 +5,8 @@ on:
     paths:
     - '**.bicep' # Should only run when an infra template changes
     - '**/infrastructure-deploy.yaml'
-
-env:
-  RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
-  BICEP_INPUT_PARAMETERS_JSON: ${{ secrets.BICEP_INPUT_PARAMETERS_JSON }}
-  
-jobs:
+ 
+ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +21,7 @@ jobs:
 
     - name: Deploy Bicep template
       run: |
-        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters "${{ env.BICEP_INPUT_PARAMETERS_JSON }}"
+        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters ${{ secrets.BICEP_INPUT_PARAMETERS_JSON }}
 
     #- name: Az CLI Resource Group Deployment
     #  uses: azure/CLI@v1
