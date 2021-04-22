@@ -1,10 +1,25 @@
+@description('The AAD object id of a user that should be granted access to Key Vault contents')
 param keyVaultAccessPolicyTargetObjectId string
+
+@description('The name of the Azure ML Workspace to create or update')
 param mlWorkspaceName string
+
+@description('The name of the Azure Key Vault to create or update')
 param keyVaultName string
+
+@description('The name of the Storage Account used by the Azure ML Workspace')
 param storageAccountName string
+
+@description('The name of the Azure ML Compute Instance to create or update')
 param computeInstanceName string
+
+@description('The name of the Azure ML Cluster to create or update')
 param mlClusterName string
+
+@description('The name of the Application Insights resource to create or update')
 param appInsightsName string
+
+@description('The name of the Azure Container Registry to create or update')
 param containerRegistryName string
 
 var location = resourceGroup().location
