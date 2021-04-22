@@ -2,6 +2,8 @@ name: Infrastructure Deploy
 
 on:
   push:
+    branches:
+    - main
     paths:
     - '**.bicep' # Should only run when an infra template changes
     - '**/infrastructure-deploy.yaml' # or, when this workflow changes
@@ -28,12 +30,6 @@ jobs:
     
     - name: Checkout
       uses: actions/checkout@v1
-
-    - name: Azure Bicep Build
-      run: |
-        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
-        chmod +x ./bicep
-        ./bicep build $GITHUB_WORKSPACE/infrastructure/main.bicep      
 
     - name: Deploy Bicep template
       run: |
