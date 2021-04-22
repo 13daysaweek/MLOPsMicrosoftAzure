@@ -6,9 +6,12 @@ on:
     - '**.bicep' # Should only run when an infra template changes
     - '**/infrastructure-deploy.yaml'
  
- jobs:
+jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
+      BICEP_INPUT_PARAMETERS_JSON: ${{ secrets.BICEP_INPUT_PARAMETERS_JSON }}      
     steps:
 
     - name: Az CLI Login
@@ -19,9 +22,15 @@ on:
     - name: Checkout
       uses: actions/checkout@v1
 
+    - name: Azure Bicep Build
+      run: |
+        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+        chmod +x ./bicep
+        ./bicep build $GITHUB_WORKSPACE/infrastructure/main.bicep      
+
     - name: Deploy Bicep template
       run: |
-        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters ${{ secrets.BICEP_INPUT_PARAMETERS_JSON }}
+        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" --template-file $GITHUB_WORKSPACE/infrastructure/main.json --parameters "${{ env.BICEP_INPUT_PARAMETERS_JSON }}"
 
     #- name: Az CLI Resource Group Deployment
     #  uses: azure/CLI@v1
