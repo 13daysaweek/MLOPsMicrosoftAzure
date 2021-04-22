@@ -22,6 +22,9 @@ param appInsightsName string
 @description('The name of the Azure Container Registry to create or update')
 param containerRegistryName string
 
+@description('The name of the Data Factory resource to create or update')
+param dataFactoryName string
+
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 
@@ -287,5 +290,13 @@ resource mlCluster 'Microsoft.MachineLearningServices/workspaces/computes@2021-0
       osType: 'Linux'
       isolatedNetwork: false
     }
+  }
+}
+
+resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
+  name: dataFactoryName
+  location: location
+  identity: {
+    type: 'SystemAssigned'
   }
 }
