@@ -1,3 +1,5 @@
+// Infra tempalte to deploy ML workspace and related resources 
+
 param keyVaultAccessPolicyTargetObjectId string
 param mlWorkspaceName string
 param keyVaultName string
