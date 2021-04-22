@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - '**.bicep' # Should only run when an infra template changes
+    - '**/infrastructure-deploy.yaml'
 
 
 
@@ -25,4 +26,4 @@ jobs:
       with:
         azcliversion: 2.22.1
         inlineScript: |
-          az deployment group create --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ secrets.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ secrets.MLWORKSPACENAME }} keyVaultName=${{ secrets.KEYVAULTNAME }} storageAccountName=${{ secrets.STORAGEACCOUNTNAME }} computeInstanceName=${{ secrets.COMPUTEINSTANCENAME }} mlClusterName=${{ secrets.MLCLUSTERNAME }} appInsightsName=${{ secrets.APPINSIGHTSNAME }} containerRegistryName=${{ secrets.CONTAINERREGISTRYNAME }}
+          az deployment group create -g ${{ secrets.RESOURCE_GROUP_NAME }} --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters ${{ secrets.BICEP_INPUT_PARAMETERS_JSON }}
