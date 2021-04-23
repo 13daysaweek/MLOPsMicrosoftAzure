@@ -9,8 +9,39 @@ on:
     - '**/infrastructure-deploy.yaml' # or, when this workflow changes
  
 jobs:
-  deploy:
+  deploy-development:
     environment: development
+    runs-on: ubuntu-latest
+    env:
+      RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
+      KEYVAULTACCESSPOLICYTARGETOBJECTID: ${{ secrets.KEYVAULTACCESSPOLICYTARGETOBJECTID }}
+      MLWORKSPACENAME: ${{ secrets.MLWORKSPACENAME }}
+      KEYVAULTNAME: ${{ secrets.KEYVAULTNAME }}
+      STORAGEACCOUNTNAME: ${{ secrets.STORAGEACCOUNTNAME }}
+      COMPUTEINSTANCENAME: ${{ secrets.COMPUTEINSTANCENAME }}
+      MLCLUSTERNAME: ${{ secrets.MLCLUSTERNAME }}
+      APPINSIGHTSNAME: ${{ secrets.APPINSIGHTSNAME }}
+      CONTAINERREGISTRYNAME: ${{ secrets.CONTAINERREGISTRYNAME }}
+      DATAFACTORYNAME: ${{ secrets.DATAFACTORYNAME }}
+    steps:
+
+    - name: Az CLI Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Deploy Bicep template
+      run: |
+        DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
+        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }}
+  
+  # Only deploy with an approval, after dev has deployed
+  deploy-production:
+    needs: deploy-development
+    environment: production
     runs-on: ubuntu-latest
     env:
       RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
