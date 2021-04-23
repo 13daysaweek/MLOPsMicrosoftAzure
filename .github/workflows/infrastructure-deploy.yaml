@@ -40,6 +40,7 @@ jobs:
 
     - name: Stop ML Compute Instance
       run: |
+        az config set extension.use_dynamic_install=yes_without_prompt
         az ml computetarget computeinstance stop --name $COMPUTEINSTANCENAME --resource-group $RESOURCE_GROUP_NAME --workspace-name $MLWORKSPACENAME
   
   # Only deploy with an approval, after dev has deployed
@@ -75,4 +76,5 @@ jobs:
 
     - name: Stop ML Compute Instance
       run: |
+        az config set extension.use_dynamic_install=yes_without_prompt
         az ml computetarget computeinstance stop --name $COMPUTEINSTANCENAME --resource-group $RESOURCE_GROUP_NAME --workspace-name $MLWORKSPACENAME
