@@ -10,6 +10,7 @@ on:
  
 jobs:
   deploy:
+    environment: development
     runs-on: ubuntu-latest
     env:
       RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP_NAME }}
