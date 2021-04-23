@@ -37,6 +37,10 @@ jobs:
       run: |
         DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
         az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }}
+
+    - name: Stop ML Compute Instance
+      run: |
+        az ml computetarget computeinstance stop --name $COMPUTEINSTANCENAME --resource-group $RESOURCE_GROUP_NAME --workspace-name $MLWORKSPACENAME
   
   # Only deploy with an approval, after dev has deployed
   deploy-production:
@@ -68,3 +72,7 @@ jobs:
       run: |
         DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
         az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }}
+
+    - name: Stop ML Compute Instance
+      run: |
+        az ml computetarget computeinstance stop --name $COMPUTEINSTANCENAME --resource-group $RESOURCE_GROUP_NAME --workspace-name $MLWORKSPACENAME
