@@ -40,6 +40,9 @@ param mlClusterMinNodeCount int
 @description('The AAD object id of the user assigned to the ML compute instance')
 param mlComputeAssignedUser string
 
+@description('An array of schedules for shutting down ML compute instances')
+param mlComputeInstanceShutdownSchedules array
+
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 
