@@ -294,10 +294,13 @@ resource mlCompute 'Microsoft.MachineLearningServices/workspaces/computes@2021-0
             interval: 1
             timeZone: 'Central Daylight Time'
             schedule: {
-              hours: [18]
-              minutes: [00]
+              hours: [
+                18
+              ]
+              minutes: [
+                0
+              ]
             }
-            startTime: '2021-01-01T00:00:00'
           }
         }
       ]
