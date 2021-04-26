@@ -40,6 +40,9 @@ param mlClusterMinNodeCount int
 @description('The AAD object id of the user assigned to the ML compute instance')
 param mlComputeAssignedUser string
 
+@description('An array of shutdown schedules for the ML compute instance')
+param mlComputeInstanceShutdownSchedules array
+
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 
@@ -286,6 +289,7 @@ resource mlCompute 'Microsoft.MachineLearningServices/workspaces/computes@2021-0
           tenantId: tenantId
         }
       }
+      schedules: mlComputeInstanceShutdownSchedules
     }
   }
 }
