@@ -292,7 +292,7 @@ resource mlCompute 'Microsoft.MachineLearningServices/workspaces/computes@2021-0
           recurrence: {
             frequency: 'Day'
             interval: 1
-            timeZone: 'Central Daylight Time'
+            timeZone: 'Central Standard Time'
             schedule: {
               hours: [
                 18
