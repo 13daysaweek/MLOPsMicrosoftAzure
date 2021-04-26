@@ -25,6 +25,18 @@ param containerRegistryName string
 @description('The name of the Data Factory resource to create or update')
 param dataFactoryName string
 
+@description('The SKU for the Azure ML compute instance')
+param computeInstanceSku string
+
+@description('The SKU for the Azure ML cluster')
+param mlClusterSku string
+
+@description('The maximum number of compute nodes for the ML cluster')
+param mlClusterMaxNodeCount int
+
+@description('The minimum number of compute nodes for the ML cluster')
+param mlClusterMinNodeCount int
+
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 
@@ -260,7 +272,7 @@ resource mlCompute 'Microsoft.MachineLearningServices/workspaces/computes@2021-0
     computeType: 'ComputeInstance'
     computeLocation: location
     properties: {
-      vmSize: 'STANDARD_DS11_V2'
+      vmSize: computeInstanceSku
       sshSettings: {
         sshPublicAccess: 'Disabled'        
       }
@@ -279,11 +291,11 @@ resource mlCluster 'Microsoft.MachineLearningServices/workspaces/computes@2021-0
     computeType: 'AmlCompute'
     computeLocation: location
     properties: {
-      vmSize: 'STANDARD_DS11_V2'
+      vmSize: mlClusterSku
       vmPriority: 'Dedicated'
       scaleSettings: {
-        maxNodeCount: 8
-        minNodeCount: 0
+        maxNodeCount: mlClusterMaxNodeCount
+        minNodeCount: mlClusterMinNodeCount
         nodeIdleTimeBeforeScaleDown: 'PT2M'
       }
       remoteLoginPortPublicAccess: 'Enabled'
