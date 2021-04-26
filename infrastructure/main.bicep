@@ -40,6 +40,12 @@ param mlClusterMinNodeCount int
 @description('The AAD object id of the user assigned to the ML compute instance')
 param mlComputeAssignedUser string
 
+@description('Name of the storage account used for data storage')
+param dataStorageAccountName string
+
+@description('The name of the ADLS gen2 container for data storage')
+param dataStorageContainerName string
+
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 
@@ -338,4 +344,47 @@ resource dataFactory 'Microsoft.DataFactory/factories@2018-06-01' = {
   identity: {
     type: 'SystemAssigned'
   }
+}
+
+resource dataStorage 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
+  name: dataStorageAccountName
+  location: location
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
+  }
+  kind: 'StorageV2'
+  properties: {
+    isHnsEnabled: true
+    accessTier: 'Hot'
+    networkAcls: {
+      bypass: 'AzureServices'
+      virtualNetworkRules: []
+      ipRules: []
+      defaultAction: 'Allow'
+    }
+    supportsHttpsTrafficOnly: true
+    encryption: {
+      services: {
+        file: {
+          keyType: 'Account'
+          enabled: true
+        }
+        blob: {
+          keyType: 'Account'
+          enabled: true
+        }
+      }
+      keySource: 'Microsoft.Storage'
+    }
+  }
+}
+
+resource dataStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
+  name: '${dataStorage.name}/default/${dataStorageContainerName}'
+  properties: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    publicAccess: 'None'
+  } 
 }
