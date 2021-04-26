@@ -26,7 +26,8 @@ jobs:
       COMPUTEINSTANCESKU: ${{ secrets.COMPUTEINSTANCESKU }}
       MLCLUSTERSKU: ${{ secrets.MLCLUSTERSKU }}
       MLCLUSTERMINNODECOUNT: ${{ secrets.MLCLUSTERMINNODECOUNT }}
-      MLCLUSTERMAXNODECOUNT: ${{ secrets.MLCLUSTERMAXNODECOUNT }}      
+      MLCLUSTERMAXNODECOUNT: ${{ secrets.MLCLUSTERMAXNODECOUNT }}
+      MLCOMPUTEASSIGNEDUSER: ${{ secrets.MLCOMPUTEASSIGNEDUSER }}
     steps:
 
     - name: Az CLI Login
@@ -40,7 +41,7 @@ jobs:
     - name: Deploy Bicep template
       run: |
         DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
-        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }} computeInstanceSku=${{ env.COMPUTEINSTANCESKU }} mlClusterSku=${{ env.MLCLUSTERSKU }} mlClusterMinNodeCount=${{ env.MLCLUSTERMINNODECOUNT}} mlClusterMaxNodeCount=${{ env.MLCLUSTERMAXNODECOUNT }}
+        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }} computeInstanceSku=${{ env.COMPUTEINSTANCESKU }} mlClusterSku=${{ env.MLCLUSTERSKU }} mlClusterMinNodeCount=${{ env.MLCLUSTERMINNODECOUNT}} mlClusterMaxNodeCount=${{ env.MLCLUSTERMAXNODECOUNT }} mlComputeAssignedUser=${{ env.MLCOMPUTEASSIGNEDUSER }}
 
     - name: Stop ML Compute Instance
       continue-on-error: true # Compute instance may already be stopped, which will lead to a failure, so just ignore that.  yolo :D    
@@ -68,6 +69,7 @@ jobs:
       MLCLUSTERSKU: ${{ secrets.MLCLUSTERSKU }}
       MLCLUSTERMINNODECOUNT: ${{ secrets.MLCLUSTERMINNODECOUNT }}
       MLCLUSTERMAXNODECOUNT: ${{ secrets.MLCLUSTERMAXNODECOUNT }}
+      MLCOMPUTEASSIGNEDUSER: ${{ secrets.MLCOMPUTEASSIGNEDUSER }}      
     steps:
 
     - name: Az CLI Login
@@ -81,7 +83,7 @@ jobs:
     - name: Deploy Bicep template
       run: |
         DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
-        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }} computeInstanceSku=${{ env.COMPUTEINSTANCESKU }} mlClusterSku=${{ env.MLCLUSTERSKU }} mlClusterMinNodeCount=${{ env.MLCLUSTERMINNODECOUNT}} mlClusterMaxNodeCount=${{ env.MLCLUSTERMAXNODECOUNT }}
+        az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }} computeInstanceSku=${{ env.COMPUTEINSTANCESKU }} mlClusterSku=${{ env.MLCLUSTERSKU }} mlClusterMinNodeCount=${{ env.MLCLUSTERMINNODECOUNT}} mlClusterMaxNodeCount=${{ env.MLCLUSTERMAXNODECOUNT }} mlComputeAssignedUser=${{ env.MLCOMPUTEASSIGNEDUSER }}
 
     - name: Stop ML Compute Instance
       continue-on-error: true # Compute instance may already be stopped, which will lead to a failure, so just ignore that.  yolo :D

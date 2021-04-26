@@ -37,6 +37,9 @@ param mlClusterMaxNodeCount int
 @description('The minimum number of compute nodes for the ML cluster')
 param mlClusterMinNodeCount int
 
+@description('The AAD object id of the user assigned to the ML compute instance')
+param mlComputeAssignedUser string
+
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 
@@ -277,6 +280,12 @@ resource mlCompute 'Microsoft.MachineLearningServices/workspaces/computes@2021-0
         sshPublicAccess: 'Disabled'        
       }
       applicationSharingPolicy: 'Shared'
+      personalComputeInstanceSettings: {
+        assignedUser: {
+          objectId: mlComputeAssignedUser
+          tenantId: tenantId
+        }
+      }
     }
   }
 }
