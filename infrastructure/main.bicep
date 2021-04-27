@@ -390,7 +390,7 @@ resource dataStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/co
   } 
 }
 
-resource adlsBlobDataStore 'Microsoft.MachineLearningServices/workspaces/datastores@2020-08-01' = {
+resource adlsBlobDataStore 'Microsoft.MachineLearningServices/workspaces/datastores@2020-09-01-preview' = {
   name: '${mlWorkspace.name}/${adlsBlobDataStoreName}'
   location: location
   properties: {
