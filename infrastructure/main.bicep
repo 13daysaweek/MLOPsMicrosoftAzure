@@ -383,8 +383,8 @@ resource dataStorage 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
 resource dataStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-01-01' = {
   name: '${dataStorage.name}/default/${dataStorageContainerName}'
   properties: {
-    defaultEncryptionScope: '$account-encryption-key'
-    denyEncryptionScopeOverride: false
+    //defaultEncryptionScope: '$account-encryption-key'
+    //denyEncryptionScopeOverride: false
     publicAccess: 'None'
   } 
 }
