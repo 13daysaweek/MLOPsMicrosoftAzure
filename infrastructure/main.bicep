@@ -398,7 +398,7 @@ resource adlsBlobDataStore 'Microsoft.MachineLearningServices/workspaces/datasto
     skipValidation: false
     accountName: dataStorage.name
     containerName: dataStorageContainer.name
-    accountKey: listKeys(dataStorage.id, dataStorage.apiVersion).primarySharedKey
+    accountKey: listKeys(dataStorage.id, dataStorage.apiVersion).keys[0].value
     storageAccountSubscriptionId: subscription().id
     stroageAccountResourceGroup: resourceGroup().name
   }
