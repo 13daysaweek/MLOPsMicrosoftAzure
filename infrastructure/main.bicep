@@ -46,6 +46,9 @@ param dataStorageAccountName string
 @description('The name of the ADLS gen2 container for data storage')
 param dataStorageContainerName string
 
+@description('The name of the AML data store that will be created for ADLS/Blob storage')
+param adlsBlobDataStoreName string
+
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 
@@ -383,8 +386,20 @@ resource dataStorage 'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
 resource dataStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-01-01' = {
   name: '${dataStorage.name}/default/${dataStorageContainerName}'
   properties: {
-    //defaultEncryptionScope: '$account-encryption-key'
-    //denyEncryptionScopeOverride: false
     publicAccess: 'None'
   } 
+}
+
+resource adlsBlobDataStore 'Microsoft.MachineLearningServices/workspaces/datastores@2020-08-01' = {
+  name: '${mlWorkspace.name}/${adlsBlobDataStoreName}'
+  location: location
+  properties: {
+    dataStoreType: 'AzureBlob'
+    skipValidation: false
+    accountName: dataStorage.name
+    containerName: dataStorageContainer.name
+    accountKey: listKeys(dataStorage.id, dataStorage.apiVersion).primarySharedKey
+    storageAccountSubscriptionId: subscription().id
+    stroageAccountResourceGroup: resourceGroup().name
+  }
 }
