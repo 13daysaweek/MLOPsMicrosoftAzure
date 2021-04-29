@@ -24,7 +24,7 @@
     "resources": [
       {
           "type": "Microsoft.MachineLearningServices/workspaces/datastores",
-          "apiVersion": "2021-09-01-preview",
+          "apiVersion": "2021-03-01-preview",
           "name": "[format('{0}/{1}', parameters('amlWorkspaceName'), parameters('dataStoreName'))]",
           "location": "[resourceGroup().location]",
           "properties": {
