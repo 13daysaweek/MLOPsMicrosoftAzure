@@ -1,6 +1,8 @@
 name: Infrastructure Deploy
 
 on:
+  workflow_dispatch:
+  
   push:
     branches:
     - main # Only run when things are pushed to main
