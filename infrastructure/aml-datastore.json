@@ -38,7 +38,7 @@
               "skipValidation": false,
               "accountName": "[parameters('storageAccountName')]",
               "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2020-08-01-preview').keys[0].value]",
-              "storageAccountSubscriptionId": "[subscription().id]",
+              "storageAccountSubscriptionId": "[subscription().subscriptionId]",
               "storageAccountResourceGroup": "[resourceGroup().name]",
               "containerName": "[parameters('containerName')]"
           }
