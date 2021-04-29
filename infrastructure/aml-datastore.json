@@ -2,6 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+      "amlWorkspaceName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of the AML workspace where the datasource will be created"
+          }
+      },
       "dataStoreName": {
           "type": "string",
           "metadata": {
@@ -19,7 +25,7 @@
       {
           "type": "Microsoft.MachineLearningServices/workspaces/datastores",
           "apiVersion": "2021-09-01-preview",
-          "name": "[parameters('dataStoreName')]",
+          "name": "[format('{0}/{1}', parameters('amlWorkspaceName'), parameters('dataStoreName'))]",
           "location": "[resourceGroup().location]",
           "properties": {
               "dataStoreType": "AzureBlob",

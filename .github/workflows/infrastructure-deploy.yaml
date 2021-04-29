@@ -49,7 +49,7 @@ jobs:
     - name: Deploy AML Datastore
       run: |
         DEPLOYMENT_NAME="aml_datastore_$(date '+%F_%H_%M_%S')"
-        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }}
+        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters amlWorkspaceName=${{ env.MLWORKSPACENAME }} dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }}
   
   # Only deploy with an approval, after dev has deployed
   deploy-production:
@@ -93,4 +93,4 @@ jobs:
     - name: Deploy AML Datastore
       run: |
         DEPLOYMENT_NAME="aml_datastore_$(date '+%F_%H_%M_%S')"
-        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }}        
+        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters amlWorkspaceName=${{ env.MLWORKSPACENAME }} dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }}        
