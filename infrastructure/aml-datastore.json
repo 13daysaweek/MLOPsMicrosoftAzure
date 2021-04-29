@@ -28,7 +28,7 @@
           "name": "[format('{0}/{1}', parameters('amlWorkspaceName'), parameters('dataStoreName'))]",
           "location": "[resourceGroup().location]",
           "properties": {
-              "dataStoreType": "AzureBlob",
+              "dataStoreType": "blob",
               "skipValidation": false,
               "accountName": "[parameters('storageAccountName')]",
               "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2020-08-01-preview').keys[0].value]",
