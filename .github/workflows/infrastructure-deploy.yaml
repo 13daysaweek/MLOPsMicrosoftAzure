@@ -45,6 +45,11 @@ jobs:
       run: |
         DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
         az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }} computeInstanceSku=${{ env.COMPUTEINSTANCESKU }} mlClusterSku=${{ env.MLCLUSTERSKU }} mlClusterMinNodeCount=${{ env.MLCLUSTERMINNODECOUNT}} mlClusterMaxNodeCount=${{ env.MLCLUSTERMAXNODECOUNT }} mlComputeAssignedUser=${{ env.MLCOMPUTEASSIGNEDUSER }} dataStorageAccountName=${{ env.DATASTORAGEACCOUNTNAME }} dataStorageContainerName=${{ env.DATASTORAGECONTAINERNAME }} adlsBlobDataStoreName=${{ env.ADLSBLOBDATASTORENAME }}
+    
+    - name: Deploy AML Datastore
+      run: |
+        DEPLOYMENT_NAME="aml_datastore_$(date '+%F_%H_%M_%S')"
+        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }}
   
   # Only deploy with an approval, after dev has deployed
   deploy-production:
@@ -84,3 +89,8 @@ jobs:
       run: |
         DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
         az deployment group create -g "${{ secrets.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }} computeInstanceSku=${{ env.COMPUTEINSTANCESKU }} mlClusterSku=${{ env.MLCLUSTERSKU }} mlClusterMinNodeCount=${{ env.MLCLUSTERMINNODECOUNT}} mlClusterMaxNodeCount=${{ env.MLCLUSTERMAXNODECOUNT }} mlComputeAssignedUser=${{ env.MLCOMPUTEASSIGNEDUSER }} dataStorageAccountName=${{ env.DATASTORAGEACCOUNTNAME }} dataStorageContainerName=${{ env.DATASTORAGECONTAINERNAME }} adlsBlobDataStoreName=${{ env.ADLSBLOBDATASTORENAME }}
+
+    - name: Deploy AML Datastore
+      run: |
+        DEPLOYMENT_NAME="aml_datastore_$(date '+%F_%H_%M_%S')"
+        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }}        

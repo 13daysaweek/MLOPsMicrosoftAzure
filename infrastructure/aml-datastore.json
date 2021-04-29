@@ -1,0 +1,34 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "dataStoreName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of the data store to create"
+          }
+      },
+      "storageAccountName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of the storage account the datastore points to"
+          }
+      }
+    },
+    "resources": [
+      {
+          "type": "Microsoft.MachineLearningServices/workspaces/datastores",
+          "apiVersion": "2021-09-01-preview",
+          "name": "[parameters('dataStoreName')]",
+          "location": "[resourceGroup().location]",
+          "properties": {
+              "dataStoreType": "AzureBlob",
+              "skipValidation": false,
+              "accountName": "[parameters('storageAccountName')]",
+              "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2020-08-01-preview').keys[0].value]",
+              "storageAccountSubscriptionId": "[subscription().id]",
+              "storageAccountResourceGroup": "[resourceGroup().name]"
+          }
+      }
+    ]
+}
