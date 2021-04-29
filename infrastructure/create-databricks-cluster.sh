@@ -1,6 +1,11 @@
 #!/bin/bash
+set -e # force script to exit when a command fails
+set -u # force script to exit when an undeclared variable is used
+set -x # enable tracing
+
+
 #TODO: AD SP creds need to be an input parameter
-AAD_SP_CREDENTIALS=$(cat aad-sp.json)
+AAD_SP_CREDENTIALS=$(cat ../../aad-sp.json)
 
 CLIENT_ID=$(echo $AAD_SP_CREDENTIALS | jq -r ".clientId")
 
