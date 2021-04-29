@@ -6,6 +6,7 @@ on:
     - main # Only run when things are pushed to main
     paths:
     - '**.bicep' # Should only run when an infra template changes
+    - '/infrastructure/*.json'
     - '**/infrastructure-deploy.yaml' # or, when this workflow changes
  
 jobs:
