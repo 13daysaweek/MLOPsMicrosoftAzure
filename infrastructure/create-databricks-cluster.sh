@@ -43,7 +43,8 @@ CREATE_CLUSTER_BODY=$(jq -n --arg WORKERS "$WORKERS" '{
   "spark_conf": {
     "spark.speculation": true
   },
-  "num_workers": $WORKERS|tonumber
+  "num_workers": $WORKERS|tonumber,
+  "autotermination_minutes": "20"
 }')
 
 #TODO: Need input parameter for workspace resource id
