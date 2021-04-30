@@ -1,7 +1,7 @@
 name: Infrastructure Deploy
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Allow this workflow to be triggered manually through Actions UI
   
   push:
     branches:
