@@ -35,24 +35,44 @@ jobs:
       DATASTORAGECONTAINERNAME: ${{ secrets.DATASTORAGECONTAINERNAME }}
       ADLSBLOBDATASTORENAME: ${{ secrets.ADLSBLOBDATASTORENAME }}
     steps:
-
-    - name: Az CLI Login
-      uses: azure/login@v1
+    - uses: ./.github/workflows/deploy-ml-infrastructure/@1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+        resource-group-name: ${{ env.RESOURCE_GROUP_NAME }}
+        keyvault-access-policy-target-object-id: ${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }}
+        ml-workspace-name: ${{ env.MLWORKSPACENAME }}
+        keyvault-name: ${{ env.KEYVAULTNAME }}
+        storage-account-name: ${{ env.STORAGEACCOUNTNAME }}
+        compute-instance-name: ${{ env.COMPUTEINSTANCENAME }}
+        ml-cluster-name: ${{ env.MLCLUSTERNAME }}
+        app-insights-name: ${{ env.APPINSIGHTSNAME }}
+        container-registry-name: ${{ env.CONTAINERREGISTRYNAME }}
+        data-factory-name: ${{ env.DATAFACTORYNAME }}
+        compute-instance-sku: ${{ env.COMPUTEINSTANCESKU }}
+        ml-cluster-sku: ${{ env.MLCLUSTERSKU }}
+        ml-cluster-min-node-count: ${{ env.MLCLUSTERMINNODECOUNT }}
+        ml-cluster-max-node-count: ${{ MLCLUSTERMAXNODECOUNT }}
+        ml-compute-assigned-user: ${{ env.MLCOMPUTEASSIGNEDUSER }}
+        data-storage-account-name: ${{ env.DATASTORAGEACCOUNTNAME}}
+        data-storage-container-name: ${{ env.DATASTORAGECONTAINERNAME}}
+        adls-blob-datastore-name: ${{ env.ADLSBLOBDATASTORENAME }}
+    # - name: Az CLI Login
+    #   uses: azure/login@v1
+    #   with:
+    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
     
-    - name: Checkout
-      uses: actions/checkout@v1
+    # - name: Checkout
+    #   uses: actions/checkout@v1
 
-    - name: Deploy Bicep template
-      run: |
-        DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
-        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }} computeInstanceSku=${{ env.COMPUTEINSTANCESKU }} mlClusterSku=${{ env.MLCLUSTERSKU }} mlClusterMinNodeCount=${{ env.MLCLUSTERMINNODECOUNT}} mlClusterMaxNodeCount=${{ env.MLCLUSTERMAXNODECOUNT }} mlComputeAssignedUser=${{ env.MLCOMPUTEASSIGNEDUSER }} dataStorageAccountName=${{ env.DATASTORAGEACCOUNTNAME }} dataStorageContainerName=${{ env.DATASTORAGECONTAINERNAME }} adlsBlobDataStoreName=${{ env.ADLSBLOBDATASTORENAME }}
+    # - name: Deploy Bicep template
+    #   run: |
+    #     DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
+    #     az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ env.KEYVAULTACCESSPOLICYTARGETOBJECTID }} mlWorkspaceName=${{ env.MLWORKSPACENAME }} keyVaultName=${{ env.KEYVAULTNAME }} storageAccountName=${{ env.STORAGEACCOUNTNAME }} computeInstanceName=${{ env.COMPUTEINSTANCENAME }} mlClusterName=${{ env.MLCLUSTERNAME }} appInsightsName=${{ env.APPINSIGHTSNAME }} containerRegistryName=${{ env.CONTAINERREGISTRYNAME }} dataFactoryName=${{ env.DATAFACTORYNAME }} computeInstanceSku=${{ env.COMPUTEINSTANCESKU }} mlClusterSku=${{ env.MLCLUSTERSKU }} mlClusterMinNodeCount=${{ env.MLCLUSTERMINNODECOUNT}} mlClusterMaxNodeCount=${{ env.MLCLUSTERMAXNODECOUNT }} mlComputeAssignedUser=${{ env.MLCOMPUTEASSIGNEDUSER }} dataStorageAccountName=${{ env.DATASTORAGEACCOUNTNAME }} dataStorageContainerName=${{ env.DATASTORAGECONTAINERNAME }} adlsBlobDataStoreName=${{ env.ADLSBLOBDATASTORENAME }}
     
-    - name: Deploy AML Datastore
-      run: |
-        DEPLOYMENT_NAME="aml_datastore_$(date '+%F_%H_%M_%S')"
-        az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters amlWorkspaceName=${{ env.MLWORKSPACENAME }} dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }} containerName=${{ env.ADLSBLOBDATASTORENAME }}
+    # - name: Deploy AML Datastore
+    #   run: |
+    #     DEPLOYMENT_NAME="aml_datastore_$(date '+%F_%H_%M_%S')"
+    #     az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters amlWorkspaceName=${{ env.MLWORKSPACENAME }} dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }} containerName=${{ env.ADLSBLOBDATASTORENAME }}
   
   # Only deploy with an approval, after dev has deployed
   deploy-production:
