@@ -1,0 +1,47 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "amlWorkspaceName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of the AML workspace where the datasource will be created"
+          }
+      },
+      "dataStoreName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of the data store to create"
+          }
+      },
+      "storageAccountName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of the storage account the datastore points to"
+          }
+      },
+      "containerName": {
+        "type": "string",
+        "metadata": {
+          "description": "The container for the datastore"
+        }
+      }
+    },
+    "resources": [
+      {
+          "type": "Microsoft.MachineLearningServices/workspaces/datastores",
+          "apiVersion": "2020-05-01-preview",
+          "name": "[format('{0}/{1}', parameters('amlWorkspaceName'), parameters('dataStoreName'))]",
+          "location": "[resourceGroup().location]",
+          "properties": {
+              "dataStoreType": "blob",
+              "skipValidation": false,
+              "accountName": "[parameters('storageAccountName')]",
+              "accountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2020-08-01-preview').keys[0].value]",
+              "storageAccountSubscriptionId": "[subscription().subscriptionId]",
+              "storageAccountResourceGroup": "[resourceGroup().name]",
+              "containerName": "[parameters('containerName')]"
+          }
+      }
+    ]
+}

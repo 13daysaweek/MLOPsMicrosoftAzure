@@ -389,17 +389,3 @@ resource dataStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/co
     publicAccess: 'None'
   } 
 }
-
-resource adlsBlobDataStore 'Microsoft.MachineLearningServices/workspaces/datastores@2021-03-01-preview' = {
-  name: '${mlWorkspace.name}/${adlsBlobDataStoreName}'
-  location: location
-  properties: {
-    dataStoreType: 'AzureBlob'
-    skipValidation: false
-    accountName: dataStorage.name
-    containerName: dataStorageContainer.name
-    accountKey: listKeys(dataStorage.id, dataStorage.apiVersion).keys[0].value
-    storageAccountSubscriptionId: subscription().id
-    stroageAccountResourceGroup: resourceGroup().name
-  }
-}
