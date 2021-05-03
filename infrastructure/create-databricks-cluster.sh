@@ -34,6 +34,43 @@ CREATE_CLUSTER_URL="https://$WORKSPACE_ROOT_URL/api/2.0/clusters/create"
 #TODO: Needs to be an input param
 WORKERS=16
 
+#We don't know if the cluster config has changed, so instead of trying to determine if we need to update the cluster config, we'll delete and recreate
+
+#First, list the clusters
+CLUSTER_NAME="my-cluster"
+LIST_CLUSTER_URL="https://$WORKSPACE_ROOT_URL/api/2.0/clusters/list"
+
+CLUSTER_LIST_RESPONSE=$(curl -s -X GET \
+-H "Authorization: Bearer $DATABRICKS_TOKEN" \
+-H "X-Databricks-Azure-SP-Management-Token: $MANAGEMENT_TOKEN" \
+-H "X-Databricks-Azure-Workspace-Resource-ID: /subscriptions/20032276-4660-477d-aefe-8379f2ab7c0d/resourceGroups/AUTUMN-ML-DEPLOY/providers/Microsoft.Databricks/workspaces/amdb" $LIST_CLUSTER_URL)
+
+CLUSTERS_EXIST=$(echo $CLUSTER_LIST_RESPONSE | jq -c -r 'try .clusters[]')
+
+if [ ! -z "$CLUSTERS_EXIST" ]
+then
+  echo "Found some existing clusters, checking to see if we need to delete one before creating"
+  CLUSTER_ID=$(echo $CLUSTER_LIST_RESPONSE | jq -c -r --arg CLUSTER_NAME $CLUSTER_NAME '.clusters[] | select(.cluster_name == $CLUSTER_NAME) | .cluster_id')
+  if [ ! -z $CLUSTER_ID ]
+  then
+    echo "Found a cluster with a name matching $CLUSTER_NAME, deleting it"
+    DELETE_CLUSTER_URL="https://$WORKSPACE_ROOT_URL/api/2.0/clusters/permanent-delete"
+    DELETE_CLUSTER_BODY=$(jq -n --arg CLUSTER_ID "$CLUSTER_ID" '{"cluster_id": $CLUSTER_ID}')
+
+    curl -s -X POST \
+    -H "Authorization: Bearer $DATABRICKS_TOKEN" \
+    -H "X-Databricks-Azure-SP-Management-Token: $MANAGEMENT_TOKEN" \
+    -H "X-Databricks-Azure-Workspace-Resource-ID: /subscriptions/20032276-4660-477d-aefe-8379f2ab7c0d/resourceGroups/AUTUMN-ML-DEPLOY/providers/Microsoft.Databricks/workspaces/amdb" \
+    -H "Content-Type: application/json" \
+    --data "$DELETE_CLUSTER_BODY" "$DELETE_CLUSTER_URL"
+    echo "Cluster queued for deletion"
+  else
+    echo "Did not find a cluster with the name $CLUSTER_NAME"
+  fi
+else
+  echo "No clusters found"
+fi
+
 #TODO: need input params for cluster name, spark version, node type, number of workers
 CREATE_CLUSTER_BODY=$(jq -n --arg WORKERS "$WORKERS" '{
   "cluster_name": "my-cluster",
@@ -44,7 +81,7 @@ CREATE_CLUSTER_BODY=$(jq -n --arg WORKERS "$WORKERS" '{
     "spark.speculation": true
   },
   "num_workers": $WORKERS|tonumber,
-  "autotermination_minutes": "20"
+  "autotermination_minutes": 20
 }')
 
 #TODO: Need input parameter for workspace resource id
