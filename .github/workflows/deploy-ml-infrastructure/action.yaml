@@ -62,21 +62,14 @@ inputs:
 runs:
   using: 'composite'
   steps:
-
-  - name: az cli Login
-    uses: azure/login@v1
-    with:
-      creds: ${{ azure-credentials }}
-
-  - name: Checkout
-    uses: actions/checkout@v1
-
   - name: Deploy Bicep template
+    shell: bash
     run: |
       DEPLOYMENT_NAME="mlops_deploy_$(date '+%F_%H_%M_%S')"
       az deployment group create -g "${{ resource-group-name }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/main.bicep --parameters keyVaultAccessPolicyTargetObjectId=${{ keyvault-access-policy-target-object-id }} mlWorkspaceName=${{ ml-workspace-name }} keyVaultName=${{ keyvault-name }} storageAccountName=${{ storage-account-name }} computeInstanceName=${{ compute-instance-name }} mlClusterName=${{ ml-cluster-name }} appInsightsName=${{ app-insights-name }} containerRegistryName=${{ container-registry-name }} dataFactoryName=${{ data-factory-name }} computeInstanceSku=${{ compute-instance-sku }} mlClusterSku=${{ ml-cluster-sku }} mlClusterMinNodeCount=${{ ml-cluster-min-node-count}} mlClusterMaxNodeCount=${{ ml-cluster-max-node-count }} mlComputeAssignedUser=${{ ml-compute-assigned-user }} dataStorageAccountName=${{ data-storage-account-name }} dataStorageContainerName=${{ data-storage-container-name }} adlsBlobDataStoreName=${{ adls-blob-datastore-name }}
 
   - name: Deploy AML Datastore
+    shell: bash
     run: |
       DEPLOYMENT_NAME="aml_datastore_$(date '+%F_%H_%M_%S')"
       az deployment group create -g "${{ resource-group.name }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters amlWorkspaceName=${{ ml-workspace-name }} dataStoreName=${{ adls-blob-datastore-name }} storageAccountName=${{ data-storage-account-name }} containerName=${{ data-storage-container-name }}
