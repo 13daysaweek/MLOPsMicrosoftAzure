@@ -51,7 +51,7 @@ jobs:
         compute-instance-sku: ${{ env.COMPUTEINSTANCESKU }}
         ml-cluster-sku: ${{ env.MLCLUSTERSKU }}
         ml-cluster-min-node-count: ${{ env.MLCLUSTERMINNODECOUNT }}
-        ml-cluster-max-node-count: ${{ MLCLUSTERMAXNODECOUNT }}
+        ml-cluster-max-node-count: ${{ env.MLCLUSTERMAXNODECOUNT }}
         ml-compute-assigned-user: ${{ env.MLCOMPUTEASSIGNEDUSER }}
         data-storage-account-name: ${{ env.DATASTORAGEACCOUNTNAME}}
         data-storage-container-name: ${{ env.DATASTORAGECONTAINERNAME}}
