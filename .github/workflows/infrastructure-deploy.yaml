@@ -35,7 +35,7 @@ jobs:
       DATASTORAGECONTAINERNAME: ${{ secrets.DATASTORAGECONTAINERNAME }}
       ADLSBLOBDATASTORENAME: ${{ secrets.ADLSBLOBDATASTORENAME }}
     steps:
-    - uses: ./.github/workflows/deploy-ml-infrastructure/@1
+    - uses: ./.github/workflows/deploy-ml-infrastructure
       with:
         azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
         resource-group-name: ${{ env.RESOURCE_GROUP_NAME }}
