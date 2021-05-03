@@ -3,6 +3,31 @@ set -e # force script to exit when a command fails
 set -u # force script to exit when an undeclared variable is used
 #set -x # uncomment to enable tracing.  WARNING: this will output things like auth tokens to the console, so don't use it in a real environment
 
+# Parameters
+# AAD-SP-CREDS a
+# Databricks Workspace Name d
+# Databricks resource id b
+# Resource Group Name r
+# Tenant ID t
+# Cluster Name c
+# Number of workers n
+# Auto-termination minutes m
+# Spark version s
+while getopts a:d:r:t:c:n:m:s flag
+do
+  case "${flag} in
+    a) AAD_SP_CREDENTIALS=${OPTARG};;
+    d) DATABRICKS_WORKSPACE_NAME=${OPTARG};;
+    b) DATABRICKS_RESOURCE_ID=${OPTARG};;
+    r) RESOURCE_GROUP_NAME=${OPTARG};;
+    t) TENANT_ID=${OPTARG};;
+    c) CLUSTER_NAME=${OPTARG};;
+    n) NUMBER_OF_WORKERS=${OPTARG};;
+    m) AUTOTERMINATION_MINUTES=${OPTARG};;
+    s) SPARK_VERSION=${OPTARG};;
+  esac
+done
+
 
 #TODO: AD SP creds need to be an input parameter so we can source creds for a GH secret
 AAD_SP_CREDENTIALS=$(cat ../../aad-sp.json)
