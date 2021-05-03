@@ -49,6 +49,9 @@ param dataStorageContainerName string
 @description('The name of the AML data store that will be created for ADLS/Blob storage')
 param adlsBlobDataStoreName string
 
+@description('The name of the Databricks workspace to provision')
+param databricksWorkspaceName string
+
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 
@@ -389,3 +392,29 @@ resource dataStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/co
     publicAccess: 'None'
   } 
 }
+
+resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
+  name: databricksWorkspaceName
+  location: location
+  sku: {
+    name: 'standard'
+  }
+  properties: {
+    parameters: {
+      enableNoPublicIp: {
+        type: 'Bool'
+        value: false
+      }
+      prepareEncryption: {
+        type: 'Bool'
+        value: false
+      }
+      requireInfrastructureEncryption: {
+        type: 'Bool'
+        value: false
+      }
+    }
+  }
+}
+
+output databricksResourceId string = databricks.id
