@@ -34,9 +34,15 @@ jobs:
       DATASTORAGEACCOUNTNAME: ${{ secrets.DATASTORAGEACCOUNTNAME }}
       DATASTORAGECONTAINERNAME: ${{ secrets.DATASTORAGECONTAINERNAME }}
       ADLSBLOBDATASTORENAME: ${{ secrets.ADLSBLOBDATASTORENAME }}
-    steps:
+    steps:   
     - name: Checkout
       uses: actions/checkout@v1
+
+    - name: Az CLI Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
     - name: 'Deploy ML Infrastructure'
       uses: ./.github/workflows/deploy-ml-infrastructure
       with:
@@ -59,10 +65,6 @@ jobs:
         data-storage-account-name: ${{ env.DATASTORAGEACCOUNTNAME}}
         data-storage-container-name: ${{ env.DATASTORAGECONTAINERNAME}}
         adls-blob-datastore-name: ${{ env.ADLSBLOBDATASTORENAME }}
-    # - name: Az CLI Login
-    #   uses: azure/login@v1
-    #   with:
-    #     creds: ${{ secrets.AZURE_CREDENTIALS }}
     
     # - name: Checkout
     #   uses: actions/checkout@v1
