@@ -415,7 +415,7 @@ resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
         value: false
       }
     }
-    managedResourceGroupId: '/${subscription().subscriptionId}/resourceGroups/${managedResourceGroupName}'
+    managedResourceGroupId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${managedResourceGroupName}'
   }  
 }
 
