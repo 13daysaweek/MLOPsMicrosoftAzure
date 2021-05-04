@@ -69,11 +69,11 @@ CLUSTER_LIST_RESPONSE=$(curl -s -X GET \
 
 CLUSTERS_EXIST=$(echo $CLUSTER_LIST_RESPONSE | jq -c -r 'try .clusters[]')
 
-if [ ! -z "$CLUSTERS_EXIST" ]
+if [[ ! -z "$CLUSTERS_EXIST" ]]
 then
   echo "Found some existing clusters, checking to see if we need to delete one before creating"
   CLUSTER_ID=$(echo $CLUSTER_LIST_RESPONSE | jq -c -r --arg CLUSTER_NAME $CLUSTER_NAME '.clusters[] | select(.cluster_name == $CLUSTER_NAME) | .cluster_id')
-  if [ ! -z $CLUSTER_ID ]
+  if [[ ! -z $CLUSTER_ID ]]
   then
     echo "Found a cluster with a name matching $CLUSTER_NAME, deleting it"
     DELETE_CLUSTER_URL="https://$WORKSPACE_ROOT_URL/api/2.0/clusters/permanent-delete"
