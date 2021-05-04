@@ -55,6 +55,7 @@ param databricksWorkspaceName string
 var location = resourceGroup().location
 var tenantId = subscription().tenantId
 var managedResourceGroupName = 'databricks-rg-${databricksWorkspaceName}-${uniqueString(databricksWorkspaceName, resourceGroup().id)}'
+var managedResourceGroupId = subscriptionResourceId('Microsoft.Resources/resourceGroup', managedResourceGroupName)
 
 resource vault 'Microsoft.KeyVault/vaults@2020-04-01-preview' = {
   name: keyVaultName
@@ -401,7 +402,8 @@ resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
     name: 'standard'
   }
   properties: {
-    managedResourceGroupId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${managedResourceGroupName}'
+    //managedResourceGroupId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${managedResourceGroupName}'
+    managedResourceGroupId: managedResourceGroupId
   }  
 }
 
