@@ -25,6 +25,9 @@ param containerRegistryName string
 @description('The name of the Data Factory resource to create or update')
 param dataFactoryName string
 
+@description('Indicates whether or not the deployment should create an ML compute instance')
+param createMlComputeInstance bool
+
 @description('The SKU for the Azure ML compute instance')
 param computeInstanceSku string
 
@@ -282,7 +285,7 @@ resource mlWorkspace 'Microsoft.MachineLearningServices/workspaces@2020-06-01' =
   }
 }
 
-resource mlCompute 'Microsoft.MachineLearningServices/workspaces/computes@2021-01-01' = {
+resource mlCompute 'Microsoft.MachineLearningServices/workspaces/computes@2021-01-01' = if(createMlComputeInstance) {
   name: '${mlWorkspace.name}/${computeInstanceName}'
   location: location
   properties: {
@@ -402,7 +405,6 @@ resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
     name: 'standard'
   }
   properties: {
-    //managedResourceGroupId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${managedResourceGroupName}'
     managedResourceGroupId: managedResourceGroupId
   }  
 }
