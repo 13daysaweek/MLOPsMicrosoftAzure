@@ -63,8 +63,9 @@ jobs:
         az deployment group create -g "${{ env.RESOURCE_GROUP_NAME }}" -n $DEPLOYMENT_NAME --template-file $GITHUB_WORKSPACE/infrastructure/aml-datastore.json --parameters amlWorkspaceName=${{ env.MLWORKSPACENAME }} dataStoreName=${{ env.ADLSBLOBDATASTORENAME }} storageAccountName=${{ env.DATASTORAGEACCOUNTNAME }} containerName=${{ env.ADLSBLOBDATASTORENAME }}
 
     - name: Deploy Databricks Cluster
+      shell: bash
       run: |
-        ./$GITHUB_WORKSPACE/infrastructure/create-databricks-cluster.sh -a ${{ secrets.AZURE_CREDENTIALS }} -d ${{ env.DATABRICKSWORKSPACENAME }} -b ${{ steps.deployBicep.outputs.databricksResourceId }} -r ${{ env.RESOURCE_GROUP_NAME }} -t ${{ env.TENANTID }} -c ${{ env.DATABRICKS_CLUSTER_NAME }} -n ${{ env.DATABRICKS_CLUSTER_WORKER_COUNT }} -m ${{ env.DATABRICKS_CLUSTER_AUTOTERMINATE_MINUTES }} -s ${{ env.SPARK_VERSION }}
+        /$GITHUB_WORKSPACE/infrastructure/create-databricks-cluster.sh -a ${{ secrets.AZURE_CREDENTIALS }} -d ${{ env.DATABRICKSWORKSPACENAME }} -b ${{ steps.deployBicep.outputs.databricksResourceId }} -r ${{ env.RESOURCE_GROUP_NAME }} -t ${{ env.TENANTID }} -c ${{ env.DATABRICKS_CLUSTER_NAME }} -n ${{ env.DATABRICKS_CLUSTER_WORKER_COUNT }} -m ${{ env.DATABRICKS_CLUSTER_AUTOTERMINATE_MINUTES }} -s ${{ env.SPARK_VERSION }}
   
   # Only deploy with an approval, after dev has deployed
   deploy-production:
