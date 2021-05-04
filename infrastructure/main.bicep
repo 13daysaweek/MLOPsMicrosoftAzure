@@ -401,20 +401,6 @@ resource databricks 'Microsoft.Databricks/workspaces@2018-04-01' = {
     name: 'standard'
   }
   properties: {
-    parameters: {
-      enableNoPublicIp: {
-        type: 'Bool'
-        value: false
-      }
-      prepareEncryption: {
-        type: 'Bool'
-        value: false
-      }
-      requireInfrastructureEncryption: {
-        type: 'Bool'
-        value: false
-      }
-    }
     managedResourceGroupId: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${managedResourceGroupName}'
   }  
 }
